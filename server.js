@@ -1,16 +1,18 @@
-//Install express server
 const express = require('express');
-const path = require('path');
-
 const app = express();
+const router = express.Router();
+const path = __dirname + '/dist/firebaseProyect/';
+const PORT = 8080;
 
-// Serve only the static files form the dist directory
-app.use(express.static(__dirname + '/dist/firebaseProyect'));
-
-app.get('/*', function(req,res) {
-    
-res.sendFile(path.join(__dirname+'/dist/firebaseProyect/index.html'));
+router.use((req, res, next) => {
+    console.log('/' + req.method);
+    next();
 });
-
-// Start the app by listening on the default Heroku port
-app.listen(process.env.PORT || 8080);
+router.get('/*', (req, res) => {
+    res.sendFile(path + 'index.html');
+});
+app.use(express.static(path));
+app.use('/', router);
+app.listen(PORT || 4200, () => {
+    console.log('Example app listening on port 8080');
+});
